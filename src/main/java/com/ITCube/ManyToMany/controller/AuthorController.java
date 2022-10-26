@@ -22,9 +22,15 @@ public class AuthorController {
 
     @GetMapping
     @ResponseStatus(value= HttpStatus.OK)
-    public List<Author> findAll(){
+    public List<Author> findAll(@RequestParam(name="name",required = false) String name){
 
-        return author.findAll();
+        if(name!=null){
+            return author.findByName(name);
+        }else{
+            return author.findAll();
+        }
+
+
     }
 
     @GetMapping("/{id}")

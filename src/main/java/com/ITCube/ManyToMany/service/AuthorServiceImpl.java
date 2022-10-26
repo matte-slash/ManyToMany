@@ -27,6 +27,12 @@ public class AuthorServiceImpl implements AuthorService {
         return result;
     }
 
+    public List<Author> findByName(String name){
+        List<Author> result=new ArrayList<>();
+        author.findByFirstNameIgnoreCase(name).forEach(result::add);
+        return result;
+    }
+
     @Override
     public Author findOne(long id) throws AuthorNotFoundException {
         return author.findById(id).orElseThrow(()-> new AuthorNotFoundException("Author "+id+" not found"));

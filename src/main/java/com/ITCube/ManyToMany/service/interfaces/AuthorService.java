@@ -9,6 +9,8 @@ public interface AuthorService {
 
     List<Author> findAll();
 
+    List<Author> findByName(String name);
+
     Author findOne(long id) throws AuthorNotFoundException;
 
     Author create(Author a);
