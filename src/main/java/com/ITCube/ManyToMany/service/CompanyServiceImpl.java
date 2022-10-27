@@ -70,4 +70,21 @@ public class CompanyServiceImpl implements CompanyService {
         Author a_result=author.findOne(ida);
         c_result.removeAuthor(a_result);
     }
+
+    @Override
+    public List<Company> query(String name, Long capital) {
+
+        return company.findQuerySQL(name,capital);
+    }
+
+    @Override
+    public List<Company> findByName(String name) {
+        return company.findByNameIgnoreCase(name);
+    }
+
+    @Override
+    public List<Company> findByCapital(Long capital) {
+        return company.findByCapitalGreaterThan(capital);
+    }
+
 }

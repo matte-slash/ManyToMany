@@ -23,7 +23,19 @@ public class CompanyController {
 
     @ResponseStatus(value= HttpStatus.OK)
     @GetMapping
-    public List<Company> findAll(){
+    public List<Company> find(@RequestParam(name="name",required = false) String name,
+                              @RequestParam(name="capital",required = false) Long capital ){
+
+        if(name!=null && capital!=null){
+            return company.query(name,capital);
+        }
+        if(name!=null){
+            return company.findByName(name);
+        }
+        if(capital!=null){
+            return company.findByCapital(capital);
+        }
+
         return company.findAll();
     }
 

@@ -22,4 +22,9 @@ public interface CompanyService {
 
     void removeAuthor(long c, long a) throws CompanyNotFoundException, AuthorNotFoundException;
 
+    List<Company> query(String name, Long capital);
+
+    List<Company> findByName(String name);
+
+    List<Company> findByCapital(Long capital);
 }

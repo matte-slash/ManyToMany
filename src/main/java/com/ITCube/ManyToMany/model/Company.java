@@ -17,6 +17,9 @@ public class Company {
     @Column(name = "c_name", columnDefinition ="TEXT", nullable = false)
     private String name;
 
+    @Column(name="capital", nullable=false)
+    private long capital;
+
     @ManyToMany(cascade = CascadeType.ALL, targetEntity= Author.class,fetch = FetchType.EAGER)
     @JoinTable(name="company_author",
         joinColumns = {@JoinColumn(name="Company_id")},
@@ -27,8 +30,9 @@ public class Company {
     public Company() {
     }
 
-    public Company(String name) {
+    public Company(String name,long capital) {
         this.name = name;
+        this.capital = capital;
         this.authors = new HashSet<Author>();
     }
 
@@ -40,6 +44,14 @@ public class Company {
     public void removeAuthor(Author a){
         this.authors.remove(a);
         a.getCompanies().remove(this);
+    }
+
+    public long getCapital() {
+        return capital;
+    }
+
+    public void setCapital(long capital) {
+        this.capital = capital;
     }
 
     public long getId() {
@@ -59,6 +71,7 @@ public class Company {
         return "Company{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", capital=" + capital +
                 ", authors=" + authors +
                 '}';
     }
