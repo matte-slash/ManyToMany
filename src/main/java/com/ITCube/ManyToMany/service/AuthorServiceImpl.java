@@ -66,7 +66,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void deleteAuthor(long id) {
-        findOneAuthor(id);
+        author.findById(id).orElseThrow(()-> new AuthorNotFoundException("Author "+id+" not found"));
         author.deleteById(id);
     }
 
