@@ -1,90 +1,126 @@
 package com.ITCube.ManyToMany.service;
 
+import com.ITCube.ManyToMany.dto.CompanyDTO;
 import com.ITCube.ManyToMany.exception.AuthorNotFoundException;
 import com.ITCube.ManyToMany.exception.CompanyNotFoundException;
 import com.ITCube.ManyToMany.model.Author;
 import com.ITCube.ManyToMany.model.Company;
+import com.ITCube.ManyToMany.repository.AuthorRepository;
 import com.ITCube.ManyToMany.repository.CompanyRepository;
 import com.ITCube.ManyToMany.service.interfaces.CompanyService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository company;
-    private final AuthorServiceImpl author;
+    private final AuthorRepository author;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public CompanyServiceImpl(CompanyRepository company, AuthorServiceImpl author) {
+    public CompanyServiceImpl(CompanyRepository company, AuthorRepository author, ModelMapper modelMapper) {
         this.company = company;
         this.author = author;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<Company> findAll() {
+    public List<CompanyDTO> findAllCompany() {
         List<Company> result = new ArrayList<Company>();
         company.findAll().forEach(result::add);
-        return result;
+        return result.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Company findOne(long id) throws CompanyNotFoundException {
-
-        return company.findById(id).orElseThrow(()->new CompanyNotFoundException("Company "+id+" not found"));
+    public CompanyDTO findOneCompany(long id) {
+        return company.findById(id)
+                .map(this::convertToDto)
+                .orElseThrow(()->new CompanyNotFoundException("Company "+id+" not found"));
 
     }
 
     @Override
-    public Company create(Company c) {
-        return company.save(c);
+    public CompanyDTO createCompany(CompanyDTO c) {
+        return convertToDto(company.save(convertFromDto(c)));
     }
 
     @Override
-    public Company update(long id, Company c) throws CompanyNotFoundException {
-        Company result=findOne(id);
+    public CompanyDTO updateCompany(long id, CompanyDTO c) {
+        Company result=company.findById(id)
+                        .orElseThrow(()->new CompanyNotFoundException(("Company "+id+" not found")));
         result.setName(c.getName());
-        return company.save(result);
+        return convertToDto(company.save(result));
     }
 
     @Override
-    public void delete(long id) throws CompanyNotFoundException {
-        Company result=findOne(id);
+    public void deleteCompany(long id) {
+        company.findById(id)
+                .orElseThrow(()->new CompanyNotFoundException("Company "+id+" not found"));
         company.deleteById(id);
     }
 
     @Transactional
-    public void addAuthor(long idc, long ida) throws CompanyNotFoundException, AuthorNotFoundException {
-        Company c_result=findOne(idc);
-        Author a_result=author.findOne(ida);
+    public void addAuthor(long idc, long ida) {
+        Company c_result=company.findById(idc)
+                .orElseThrow(()->new CompanyNotFoundException("Company "+idc+" not found"));
+        Author a_result=author.findById(ida)
+                .orElseThrow(()->new AuthorNotFoundException("Author "+ida+" not found"));
         c_result.addAuthor(a_result);
     }
 
     @Transactional
-    public void removeAuthor(long idc, long ida) throws CompanyNotFoundException, AuthorNotFoundException {
-        Company c_result=findOne(idc);
-        Author a_result=author.findOne(ida);
+    public void removeAuthor(long idc, long ida) {
+        Company c_result=company.findById(idc)
+                .orElseThrow(()->new CompanyNotFoundException("Company "+idc+" not found"));
+        Author a_result=author.findById(ida)
+                        .orElseThrow(()->new AuthorNotFoundException("Author "+ida+" not found"));
         c_result.removeAuthor(a_result);
     }
 
     @Override
-    public List<Company> query(String name, Long capital) {
-
-        return company.findQuerySQL(name,capital);
+    public List<CompanyDTO> query(String name, Long capital) {
+        return company.findQuerySQL(name,capital)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Company> findByName(String name) {
-        return company.findByNameIgnoreCase(name);
+    public List<CompanyDTO> findCompanyByName(String name) {
+        return company.findByNameIgnoreCase(name)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Company> findByCapital(Long capital) {
-        return company.findByCapitalGreaterThan(capital);
+    public List<CompanyDTO> findCompanyByCapital(Long capital) {
+        return company.findByCapitalGreaterThan(capital)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private CompanyDTO convertToDto(Company c) {
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.LOOSE);
+        return modelMapper.map(c, CompanyDTO.class);
+    }
+
+    private Company convertFromDto(CompanyDTO c) {
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.LOOSE);
+        return modelMapper.map(c, Company.class);
     }
 
 }

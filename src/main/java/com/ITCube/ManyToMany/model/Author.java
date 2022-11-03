@@ -1,7 +1,5 @@
 package com.ITCube.ManyToMany.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +19,6 @@ public class Author {
     private String lastName;
 
     @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("authors")
     private Set<Company> companies;
 
     public Author() {

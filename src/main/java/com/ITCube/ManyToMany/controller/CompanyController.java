@@ -1,17 +1,21 @@
 package com.ITCube.ManyToMany.controller;
 
+import com.ITCube.ManyToMany.dto.CompanyDTO;
 import com.ITCube.ManyToMany.exception.AuthorNotFoundException;
 import com.ITCube.ManyToMany.exception.CompanyNotFoundException;
 import com.ITCube.ManyToMany.model.Company;
 import com.ITCube.ManyToMany.service.CompanyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(path="/companies")
+@Validated
 public class CompanyController {
 
     private final CompanyServiceImpl company;
@@ -23,45 +27,45 @@ public class CompanyController {
 
     @ResponseStatus(value= HttpStatus.OK)
     @GetMapping
-    public List<Company> find(@RequestParam(name="name",required = false) String name,
-                              @RequestParam(name="capital",required = false) Long capital ){
+    public List<CompanyDTO> find(@RequestParam(name="name",required = false) String name,
+                                 @RequestParam(name="capital",required = false) Long capital ){
 
         if(name!=null && capital!=null){
             return company.query(name,capital);
         }
         if(name!=null){
-            return company.findByName(name);
+            return company.findCompanyByName(name);
         }
         if(capital!=null){
-            return company.findByCapital(capital);
+            return company.findCompanyByCapital(capital);
         }
 
-        return company.findAll();
+        return company.findAllCompany();
     }
 
     @ResponseStatus(value= HttpStatus.FOUND)
     @GetMapping("/{id}")
-    public Company findOne(@PathVariable long id) throws CompanyNotFoundException {
-        return company.findOne(id);
+    public CompanyDTO findOne(@PathVariable long id) {
+        return company.findOneCompany(id);
     }
 
     @ResponseStatus(value= HttpStatus.CREATED)
     @PostMapping
-    public Company create(@RequestBody Company c){
-        return company.create(c);
+    public CompanyDTO create(@RequestBody @Valid CompanyDTO c){
+        return company.createCompany(c);
     }
 
 
     @ResponseStatus(value= HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) throws CompanyNotFoundException{
-        company.delete(id);
+    public void delete(@PathVariable long id) {
+        company.deleteCompany(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(value= HttpStatus.OK)
-    public Company update(@PathVariable long id, @RequestBody Company c) throws CompanyNotFoundException {
-        return company.update(id,c);
+    public CompanyDTO update(@PathVariable long id, @RequestBody @Valid CompanyDTO c) {
+        return company.updateCompany(id,c);
     }
 
     @PostMapping("/{idc}/add/{ida}")

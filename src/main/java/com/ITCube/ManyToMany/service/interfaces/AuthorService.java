@@ -1,5 +1,6 @@
 package com.ITCube.ManyToMany.service.interfaces;
 
+import com.ITCube.ManyToMany.dto.AuthorDTO;
 import com.ITCube.ManyToMany.exception.AuthorNotFoundException;
 import com.ITCube.ManyToMany.model.Author;
 
@@ -7,16 +8,16 @@ import java.util.List;
 
 public interface AuthorService {
 
-    List<Author> findAll();
+    List<AuthorDTO> findAllAuthor();
 
-    List<Author> findByName(String name);
+    List<AuthorDTO> findAuthorByName(String name);
 
-    Author findOne(long id) throws AuthorNotFoundException;
+    AuthorDTO findOneAuthor(long id) throws AuthorNotFoundException;
 
-    Author create(Author a);
+    AuthorDTO createAuthor(AuthorDTO a);
 
-    Author update(long id,Author a) throws AuthorNotFoundException;
+    AuthorDTO updateAuthor(long id, AuthorDTO a);
 
-    void delete(long id) throws AuthorNotFoundException;
+    void deleteAuthor(long id);
 
 }

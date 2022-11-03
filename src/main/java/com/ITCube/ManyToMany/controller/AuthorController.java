@@ -1,16 +1,19 @@
 package com.ITCube.ManyToMany.controller;
 
+import com.ITCube.ManyToMany.dto.AuthorDTO;
 import com.ITCube.ManyToMany.exception.AuthorNotFoundException;
-import com.ITCube.ManyToMany.model.Author;
 import com.ITCube.ManyToMany.service.AuthorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(path="/authors")
+@Validated
 public class AuthorController {
 
     private final AuthorServiceImpl author;
@@ -22,42 +25,39 @@ public class AuthorController {
 
     @GetMapping
     @ResponseStatus(value= HttpStatus.OK)
-    public List<Author> findAll(@RequestParam(name="name",required = false) String name){
-
+    public List<AuthorDTO> findAll(@RequestParam(name="name",required = false) String name){
         if(name!=null){
-            return author.findByName(name);
+            return author.findAuthorByName(name);
         }else{
-            return author.findAll();
+            return author.findAllAuthor();
         }
-
-
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(value=HttpStatus.OK)
-    public Author findOne(@PathVariable long id) throws AuthorNotFoundException {
-        return author.findOne(id);
+    public AuthorDTO findOneAuthor(@PathVariable long id) {
+        return author.findOneAuthor(id);
     }
 
     @PostMapping()
     @ResponseStatus(value=HttpStatus.CREATED)
-    public Author create(@RequestBody Author a){
+    public AuthorDTO create(@Valid @RequestBody AuthorDTO a){
 
-        return author.create(a);
+        return author.createAuthor(a);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(value=HttpStatus.OK)
-    public Author update(@PathVariable long id, @RequestBody Author a) throws AuthorNotFoundException {
+    public AuthorDTO updateAuthor(@PathVariable long id,@Valid @RequestBody AuthorDTO a) {
 
-        return author.update(id,a);
+        return author.updateAuthor(id,a);
 
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value=HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id) throws AuthorNotFoundException {
-        author.delete(id);
+    public void deleteAuthor(@PathVariable long id) throws AuthorNotFoundException {
+        author.deleteAuthor(id);
     }
 
 

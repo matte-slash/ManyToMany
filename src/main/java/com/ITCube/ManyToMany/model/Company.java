@@ -1,7 +1,5 @@
 package com.ITCube.ManyToMany.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +22,6 @@ public class Company {
     @JoinTable(name="company_author",
         joinColumns = {@JoinColumn(name="Company_id")},
         inverseJoinColumns = {@JoinColumn(name="Author_id")})
-    @JsonIgnoreProperties("companies")
     private Set<Author> authors;
 
     public Company() {

@@ -1,5 +1,6 @@
 package com.ITCube.ManyToMany.service.interfaces;
 
+import com.ITCube.ManyToMany.dto.CompanyDTO;
 import com.ITCube.ManyToMany.exception.AuthorNotFoundException;
 import com.ITCube.ManyToMany.exception.CompanyNotFoundException;
 import com.ITCube.ManyToMany.model.Company;
@@ -8,23 +9,23 @@ import java.util.List;
 
 public interface CompanyService {
 
-    List<Company> findAll();
+    List<CompanyDTO> findAllCompany();
 
-    Company findOne(long id) throws CompanyNotFoundException;
+    CompanyDTO findOneCompany(long id);
 
-    Company create(Company c);
+    CompanyDTO createCompany(CompanyDTO c);
 
-    Company update(long id, Company c) throws CompanyNotFoundException;
+    CompanyDTO updateCompany(long id, CompanyDTO c);
 
-    void delete(long id) throws CompanyNotFoundException;
+    void deleteCompany(long id);
 
-    void addAuthor(long c, long a) throws CompanyNotFoundException, AuthorNotFoundException;
+    void addAuthor(long c, long a);
 
-    void removeAuthor(long c, long a) throws CompanyNotFoundException, AuthorNotFoundException;
+    void removeAuthor(long c, long a);
 
-    List<Company> query(String name, Long capital);
+    List<CompanyDTO> query(String name, Long capital);
 
-    List<Company> findByName(String name);
+    List<CompanyDTO> findCompanyByName(String name);
 
-    List<Company> findByCapital(Long capital);
+    List<CompanyDTO> findCompanyByCapital(Long capital);
 }
