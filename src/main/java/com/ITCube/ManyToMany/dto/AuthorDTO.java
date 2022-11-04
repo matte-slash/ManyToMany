@@ -18,7 +18,7 @@ public class AuthorDTO {
     private String lastName;
 
     @JsonIgnoreProperties("authors")
-    private Set<Company> companies;
+    private Set<CompanyDTO> companies;
 
     public AuthorDTO() {
     }
@@ -29,7 +29,7 @@ public class AuthorDTO {
         this.companies=new HashSet<>();
     }
 
-    public AuthorDTO(long id, String firstName, String lastName, Set<Company> companies) {
+    public AuthorDTO(long id, String firstName, String lastName, Set<CompanyDTO> companies) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,11 +60,11 @@ public class AuthorDTO {
         this.lastName = lastName;
     }
 
-    public Set<Company> getCompanies() {
+    public Set<CompanyDTO> getCompanies() {
         return companies;
     }
 
-    public void setCompanies(Set<Company> companies) {
+    public void setCompanies(Set<CompanyDTO> companies) {
         this.companies = companies;
     }
 }

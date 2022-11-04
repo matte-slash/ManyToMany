@@ -42,16 +42,13 @@ public class AuthorController {
     @PostMapping()
     @ResponseStatus(value=HttpStatus.CREATED)
     public AuthorDTO create(@Valid @RequestBody AuthorDTO a){
-
         return author.createAuthor(a);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(value=HttpStatus.OK)
     public AuthorDTO updateAuthor(@PathVariable long id,@Valid @RequestBody AuthorDTO a) {
-
         return author.updateAuthor(id,a);
-
     }
 
     @DeleteMapping("/{id}")
@@ -59,6 +56,5 @@ public class AuthorController {
     public void deleteAuthor(@PathVariable long id) throws AuthorNotFoundException {
         author.deleteAuthor(id);
     }
-
 
 }

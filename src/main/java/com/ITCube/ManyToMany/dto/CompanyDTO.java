@@ -19,12 +19,12 @@ public class CompanyDTO {
     private long capital;
 
     @JsonIgnoreProperties("companies")
-    private Set<Author> authors;
+    private Set<AuthorDTO> authors;
 
     public CompanyDTO() {
     }
 
-    public CompanyDTO(long id, String name, long capital, Set<Author> authors) {
+    public CompanyDTO(long id, String name, long capital, Set<AuthorDTO> authors) {
         this.id = id;
         this.name = name;
         this.capital = capital;
@@ -61,11 +61,11 @@ public class CompanyDTO {
         this.capital = capital;
     }
 
-    public Set<Author> getAuthors() {
+    public Set<AuthorDTO> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Author> authors) {
+    public void setAuthors(Set<AuthorDTO> authors) {
         this.authors = authors;
     }
 }
