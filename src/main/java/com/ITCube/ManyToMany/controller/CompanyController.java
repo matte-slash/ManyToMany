@@ -27,7 +27,7 @@ public class CompanyController {
 
     @ResponseStatus(value= HttpStatus.OK)
     @GetMapping
-    public List<CompanyDTO> find(@RequestParam(name="name",required = false) String name,
+    public List<CompanyDTO> findCompany(@RequestParam(name="name",required = false) String name,
                                  @RequestParam(name="capital",required = false) Long capital ){
 
         if(name!=null && capital!=null){
