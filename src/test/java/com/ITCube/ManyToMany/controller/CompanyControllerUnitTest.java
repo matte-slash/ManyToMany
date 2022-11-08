@@ -1,6 +1,5 @@
 package com.ITCube.ManyToMany.controller;
 
-import com.ITCube.ManyToMany.dto.AuthorDTO;
 import com.ITCube.ManyToMany.dto.CompanyDTO;
 import com.ITCube.ManyToMany.exception.CompanyNotFoundException;
 import com.ITCube.ManyToMany.service.CompanyServiceImpl;
@@ -15,7 +14,6 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class CompanyControllerUnitTest {
@@ -127,7 +125,6 @@ public class CompanyControllerUnitTest {
     @Test
     void deleteTest(){
         // Arrange
-        CompanyDTO expected=new CompanyDTO("Azienda",2_000);
         doNothing().when(service).deleteCompany(anyLong());
 
         // Action
