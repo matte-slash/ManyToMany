@@ -1,12 +1,10 @@
 package com.ITCube.ManyToMany.service;
 
 import com.ITCube.ManyToMany.dto.AuthorDTO;
-import com.ITCube.ManyToMany.model.Author;
-import com.ITCube.ManyToMany.repository.AuthorRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -15,18 +13,26 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AuthorServiceImplIntegrationTest {
 
     @Autowired
     private AuthorServiceImpl underTest;
-    @Autowired
-    private AuthorRepository rep;
 
-    @BeforeEach
-    void setUp(){
-        rep.deleteAll();
+    @Test
+    void findAllAuthorTest(){
+        // Arrange
+        AuthorDTO expected=new AuthorDTO("Luca","Rosso");
+        underTest.createAuthor(expected);
+
+        // Action
+        List<AuthorDTO> result=underTest.findAllAuthor();
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getFirstName()).isEqualTo(expected.getFirstName());
     }
-
 
     @Test
     void testCreate() {
@@ -42,20 +48,7 @@ public class AuthorServiceImplIntegrationTest {
         assertThat(found.getLastName()).isEqualTo(expected.getLastName());
     }
 
-    @Test
-    void findAllAuthorTest(){
-        // Arrange
-        AuthorDTO expected=new AuthorDTO("Matteo","Rosso");
-        underTest.createAuthor(expected);
 
-        // Action
-        List<AuthorDTO> result=underTest.findAllAuthor();
-
-        // Assert
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getFirstName()).isEqualTo(expected.getFirstName());
-    }
 
     @Test
     void findAuthorByNameTest(){
