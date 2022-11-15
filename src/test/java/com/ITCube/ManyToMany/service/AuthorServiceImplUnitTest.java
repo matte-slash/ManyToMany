@@ -48,12 +48,16 @@ class AuthorServiceImplUnitTest {
     @Test
     void findAllAuthorTest() {
         // When
-        when(rep.findAll()).thenReturn(List.of(new Author("Matteo", "Rosso")));
+        Author expected=new Author("Matteo","Rosso");
+        when(rep.findAll()).thenReturn(List.of(expected));
+        when(modelMapper.map(expected,AuthorDTO.class)).thenReturn(new AuthorDTO("Matteo","Rosso"));
+        // Action
+        List<AuthorDTO> result=underTest.findAllAuthor();
 
         // Assert
-        assertFalse(underTest.findAllAuthor().isEmpty());
-        assertThat(underTest.findAllAuthor().size(), equalTo(1));
-        verify(rep,times(2)).findAll();
+        assertFalse(result.isEmpty());
+        assertThat(result.size(), equalTo(1));
+        verify(rep,times(1)).findAll();
         verifyNoMoreInteractions(rep);
     }
 
