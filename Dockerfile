@@ -9,6 +9,7 @@ FROM openjdk:17
 WORKDIR ManyToMany
 COPY --from=builder ManyToMany/dependencies/ ./
 COPY --from=builder ManyToMany/spring-boot-loader ./
+COPY --from=builder ManyToMany/internal-dependencies ./
 COPY --from=builder ManyToMany/snapshot-dependencies ./
 COPY --from=builder ManyToMany/application/ ./
 ENTRYPOINT ["java","org.springframework.boot.loader.JarLauncher"]
